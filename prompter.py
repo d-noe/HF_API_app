@@ -60,6 +60,8 @@ class PrompterHF(Prompter):
         model_name,
     ):
         self.model_name = model_name
+        if hasattr(self, "client"):
+            self.client.get_model_status(model_name)
         return
 
     def _set_generation_args(
