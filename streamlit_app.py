@@ -9,7 +9,19 @@ float_init(theme=True, include_unstable_primary=False)
 
 HELP_HF_TOKEN_API = """**Don't have an API token?** Head over to [HuggingFace](https://huggingface.co/docs/hub/security-tokens) to sign up for one."""
 
-AVAILABLE_MODELS = [
+AVAILABLE_OR_MODELS = [
+    "meta-llama/llama-3.2-1b-instruct:free",
+    "meta-llama/llama-3.2-3b-instruct:free",
+    "meta-llama/llama-3.1-8b-instruct:free",
+    "meta-llama/llama-3.1-70b-instruct:free",
+    "meta-llama/llama-3.1-405b-instruct:free",
+    "qwen/qwen-2-7b-instruct:free",
+    "google/gemma-2-9b-it:free",
+    "mistralai/mistral-7b-instruct:free",
+    "huggingfaceh4/zephyr-7b-beta:free",
+]
+
+AVAILABLE_HF_MODELS = [
     "mistralai/Mistral-7B-Instruct-v0.3",
     "mistralai/Mixtral-8x7B-Instruct-v0.1",
     "Qwen/QwQ-32B-Preview",
@@ -21,19 +33,7 @@ AVAILABLE_MODELS = [
     "HuggingFaceH4/zephyr-7b-beta",
     "HuggingFaceH4/zephyr-7b-alpha",
     "01-ai/Yi-1.5-34B-Chat",
-
 ]
-
-# Requires Pro / slow / not working / (too) low quality ?
-# [ 
-#     "meta-llama/Llama-3.3-70B-Instruct",
-#     "meta-llama/Llama-2-7b-chat-hf",
-#     "openai-community/gpt2",
-#     "google/gemma-2-9b-it",
-#     "tiiuae/falcon-7b-instruct",
-#     "meta-llama/Llama-3.1-70B-Instruct",
-#     ""
-# ]
 
 def clear_conversation():
     st.session_state.messages = []
