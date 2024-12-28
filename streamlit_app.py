@@ -4,74 +4,20 @@ import pandas as pd
 from streamlit_float import *
 
 from prompter import *
+from utils import *
+from app_config import *
 
 float_init(theme=True, include_unstable_primary=False)
 
-HELP_HF_TOKEN_API = """**Don't have an API token?** Head over to [HuggingFace](https://huggingface.co/docs/hub/security-tokens) to sign up for one."""
+SERVICES = read_json("params/services.json")
+DEFAULT_GEN_ARGS = read_json("params/gen_args.json")
 
-AVAILABLE_OR_MODELS = [
-    "meta-llama/llama-3.2-1b-instruct:free",
-    "meta-llama/llama-3.2-3b-instruct:free",
-    "meta-llama/llama-3.1-8b-instruct:free",
-    "meta-llama/llama-3.1-70b-instruct:free",
-    "meta-llama/llama-3.1-405b-instruct:free",
-    "qwen/qwen-2-7b-instruct:free",
-    "google/gemma-2-9b-it:free",
-    "mistralai/mistral-7b-instruct:free",
-    "huggingfaceh4/zephyr-7b-beta:free",
-]
-
-AVAILABLE_HF_MODELS = [
-    "mistralai/Mistral-7B-Instruct-v0.3",
-    "mistralai/Mixtral-8x7B-Instruct-v0.1",
-    "Qwen/QwQ-32B-Preview",
-    "Qwen/Qwen2.5-72B-Instruct",
-    "google/gemma-1.1-7b-it",
-    "google/gemma-2-27b-it",
-    "meta-llama/Llama-3.2-3B-Instruct",
-    "NousResearch/Hermes-3-Llama-3.1-8B",
-    "HuggingFaceH4/zephyr-7b-beta",
-    "HuggingFaceH4/zephyr-7b-alpha",
-    "01-ai/Yi-1.5-34B-Chat",
-]
 
 def clear_conversation():
     st.session_state.messages = []
 
 def set_log_status(status_bool:bool=True):
     st.session_state["log_status"] = status_bool
-
-def configure_sidebar(prompter):
-    """Sidebar configuration for model selection and generation parameters."""
-    st.sidebar.header("Configuration")
-
-    # API Token
-    if 'HF_API_TOKEN' in st.secrets:
-        hf_api = st.secrets['HF_API_TOKEN']
-    else:
-        hf_api = st.sidebar.text_input('Enter HuggingFace API token:', help=HELP_HF_TOKEN_API, label_visibility="visible", type='password')
-
-    try:
-        if hf_api and (hf_api.startswith("hf_") and len(hf_api)==37):
-            prompter._set_client(hf_api)
-            st.session_state["log_status"] = True
-        else:
-            st.sidebar.warning('Please enter your HuggingFace API token.', icon='⚠️')
-            st.session_state["log_status"] = False
-    except Exception as e:
-        st.sidebar.warning(f'Error connecting to HuggingFace API: {e}', icon='⚠️')
-        st.session_state["log_status"] = False
-
-    # Display API connection status
-    log_status_str = "🟢 Connected" if st.session_state["log_status"] else "🔴 Disconnected"
-    st.sidebar.text(f"API Status: {log_status_str}")
-
-    # Generation parameters
-    st.sidebar.subheader("Generation Parameters")
-    temperature = st.sidebar.slider("Temperature:", 0.0, 2.0, 1.0)
-    top_p = st.sidebar.slider("Top-p:", 0.0001, .9999, .9)
-    max_tokens = st.sidebar.slider("Max New Tokens:", 1, 2048, 512)
-    prompter._set_generation_args({"temperature": temperature, "top_p": top_p, "max_tokens": max_tokens})
 
 
 def chat_mode(prompter):
@@ -145,17 +91,23 @@ def csv_upload_mode(prompter):
 
 def main():
     # Ensure the title is displayed on every re-render
-    st.title("HuggingFace Model Interaction")  # Persistent title
+    st.title("LLMs APIs Interactions")  # Persistent title
 
     # Initialize prompter
-    prompter = PrompterHF()
+    prompter = Prompter()
 
     # Configure sidebar
-    configure_sidebar(prompter)
+    with st.sidebar:
+        configure_api(
+            prompter = prompter,
+            services_dict = SERVICES,
+            generation_args = DEFAULT_GEN_ARGS
+        )
 
     # Model selection
-    AVAILABLE_MODELS_WITH_CUSTOM = AVAILABLE_MODELS + ["Custom Model (Enter Below)"]
-    selected_option = st.selectbox("Select or Enter Model Name:", AVAILABLE_MODELS_WITH_CUSTOM)
+    available_models = st.session_state["AVAILABLE_MODELS"]
+    available_models_w_custom = available_models + ["Custom Model (Enter Below)"]
+    selected_option = st.selectbox("Select or Enter Model Name:", available_models_w_custom)
 
     if selected_option == "Custom Model (Enter Below)":
         custom_model_name = st.text_input("Enter Custom Model Name:", key="custom_model_input")
