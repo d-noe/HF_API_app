@@ -1,0 +1,25 @@
+name: "few shot translation"
+description: "few shot instructions for subjects translation"
+input_variables:
+  ["text"]
+prefix: |
+  Please, translate the following sentences from French to English. Provide only the translation without further notes or explanation.
+core_prompt: |
+  Input: Les formes contemporaines de militantisme écologique
+  Output: Contemporary forms of environmental activism
+
+  Input: Sociologie des loisirs et du tourisme
+  Output: Sociology of leisure and tourism
+
+  Input: La place des langues minoritaires dans la construction identitaire
+  Output: The role of minority languages in the construction of identity
+
+  Input: L'évolution du concept de communauté dans un monde globalisé
+  Output: The evolving concept of community in a globalized world
+
+  Input: La criminalité économique et ses implications sociales
+  Output: Economic crime and its social implications
+  
+suffix: |
+  Input: {text}
+  Output:

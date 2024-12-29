@@ -61,11 +61,15 @@ def csv_upload_mode(prompter):
     """CSV upload and completion mode tab functionality."""
     st.subheader("Upload CSV and Get Completions")
     uploaded_file = st.file_uploader("Upload CSV File:", type=["csv"])
+    uploaded_template = st.file_uploader("[Opt.] upload yaml prompt template:", type=["yaml"])
 
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
+        if uploaded_template:
+            prompter.load_prompt_template(uploaded_template.getvalue())
         st.write("Preview of uploaded file:", df.head())
         text_column = st.selectbox("Select Text Column for Completion:", df.columns)
+        st.write(f"Prompt example:\n\n {prompter.make_prompt(list(df[text_column])[0])}")
 
         if st.button("Generate Completions"):
             if not st.session_state["log_status"]:

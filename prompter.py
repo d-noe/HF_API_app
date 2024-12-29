@@ -1,5 +1,6 @@
 import requests
 import json
+import yaml
 
 # Constants for API endpoints
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"  # Default URL for OpenRouter API
@@ -24,6 +25,7 @@ class Prompter:
         self.model_name = None  # Name of the model to use
         self.generation_args = {}  # Additional arguments for generation
         self.logged = False  # Reserved flag, possibly for logging activity (unused here)
+        self.prompt_template = None
 
     # =============================================
     def _set_base_url(
@@ -133,4 +135,33 @@ class Prompter:
             list: A list of response strings for each prompt.
         """
         # TODO: Implement optimized batch requests (e.g., parallelization or API-specific batching)
-        return [self.generate(prompt_dicts=[{"role": "user", "content": p}]) for p in prompts]
+        return [self.generate(prompt_dicts=[{"role": "user", "content": self.make_prompt(p)}]) for p in prompts]
+
+    # =============================================
+    def make_prompt(
+        self, prompt:str,
+    ):
+        if not self.prompt_template is None:
+            return self.prompt_template.format(text=prompt)
+        return prompt
+
+    def load_prompt_template(
+        self,
+        yaml_template:str=None,
+    ):
+        if yaml_template is None:
+            self.prompt_template = None
+        else:
+            # Load the YAML file
+            #with open(yaml_template, "r") as file:
+            yaml_template = yaml.safe_load(yaml_template)
+
+            prompt_tmp = "\n".join([
+                yaml_template["prefix"], 
+                yaml_template["core_prompt"], 
+                yaml_template["suffix"]
+            ])
+
+            self.prompt_template = prompt_tmp
+
+        return

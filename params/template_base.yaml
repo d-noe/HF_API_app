@@ -1,0 +1,9 @@
+name: "base template"
+description: "base template to study LLMs sociological framing — provide 3 sociologists for a topic"
+input_variables:
+  ["text"]
+prefix: |
+  Which sociologists are most relevant for addressing this topic and why? Provide three sociologists.
+core_prompt: |
+suffix: |
+  Topic: {text}
