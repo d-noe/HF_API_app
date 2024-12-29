@@ -1,10 +1,22 @@
 import requests
 import json
 import yaml
+import multiprocessing
+import os
 
 # Constants for API endpoints
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"  # Default URL for OpenRouter API
 HF_URL = "https://api-inference.huggingface.co/v1/chat/completions"  # Alternate URL for HuggingFace API
+
+def worker(args):
+    """
+    Worker function to handle a single prompt with its index.
+    This needs to be a top-level function for multiprocessing to work.
+    """
+    instance, index, prompt = args
+    prompt_dict = [{"role": "user", "content": instance.make_prompt(prompt)}]
+    response = instance.generate(prompt_dicts=prompt_dict)
+    return index, response
 
 class Prompter:
     """
@@ -135,7 +147,14 @@ class Prompter:
             list: A list of response strings for each prompt.
         """
         # TODO: Implement optimized batch requests (e.g., parallelization or API-specific batching)
-        return [self.generate(prompt_dicts=[{"role": "user", "content": self.make_prompt(p)}]) for p in prompts]
+        # ----
+        indexed_prompts = [(self, i, p) for i, p in enumerate(prompts)]
+        with multiprocessing.Pool(processes=min(len(indexed_prompts), os.cpu_count())) as pool:
+            # Map the worker function to the prompts and maintain order
+            results = pool.map(worker, indexed_prompts)
+
+        results.sort(key=lambda x: x[0])
+        return [response for _, response in results]
 
     # =============================================
     def make_prompt(
