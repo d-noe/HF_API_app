@@ -77,7 +77,7 @@ def csv_upload_mode(prompter):
             else:
                 with st.spinner("Generating completions..."):
                     try:
-                        df[f"{prompter.model_name}_completion"] = prompter.generate_batch(prompts=df[text_column])
+                        df[f"{prompter.model_name}_completion"] = await prompter.generate_batch(prompts=df[text_column])
                         st.success("Completions added!")
                         st.write("Preview of updated file:", df.head())
 
