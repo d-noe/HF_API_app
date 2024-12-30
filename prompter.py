@@ -1,7 +1,7 @@
 import requests
 import json
 import yaml
-import multiprocessing
+import asyncio
 import os
 
 # Constants for API endpoints
@@ -133,9 +133,19 @@ class Prompter:
         # Parse the API response and return the content of the first choice
         return json.loads(response.content)["choices"][0]["message"]["content"]
 
-    def generate_batch(
+    async def async_generate(
+        self,
+        prompt_dicts,
+        index:int,
+    ):
+        loop = asyncio.get_event_loop()
+        response = await loop.run_in_executor(None, self.generate, prompt_dicts)
+        return index, response
+
+    async def generate_batch(
         self,
         prompts: list,  # List of prompt strings
+        batch_size:int=16
     ):
         """
         Generates responses for a batch of prompts by calling the `generate` method for each.
@@ -148,11 +158,20 @@ class Prompter:
         """
         # TODO: Implement optimized batch requests (e.g., parallelization or API-specific batching)
         # ----
-        indexed_prompts = [(self, i, p) for i, p in enumerate(prompts)]
-        with multiprocessing.Pool(processes=min(len(indexed_prompts), os.cpu_count())) as pool:
-            # Map the worker function to the prompts and maintain order
-            results = pool.map(worker, indexed_prompts)
-
+        if batch_size is None:
+            batch_size = len(prompts)
+        indexed_prompts = [(i, p) for i, p in enumerate(prompts)]
+        results = []
+        for i in range(0, len(indexed_prompts), batch_size):
+            batch = indexed_prompts[i:i + batch_size]  # Get the next batch
+            tasks = [
+                self.async_generate(
+                    prompt_dicts=[{"role": "user", "content": self.make_prompt(id_prompt[1])}], 
+                    index=id_prompt[0]
+                ) for id_prompt in batch
+            ]
+            batch_results = await asyncio.gather(*tasks)  # Run the batch concurrently
+            results.extend(batch_results)  # Collect results
         results.sort(key=lambda x: x[0])
         return [response for _, response in results]
 
