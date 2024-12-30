@@ -56,6 +56,9 @@ def get_api_token(token_name):
     """
     api_key = None
 
+    if token_name is None:
+        return None
+        
     if token_name in st.secrets:
         api_key = st.secrets[token_name]
     else:
