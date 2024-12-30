@@ -142,7 +142,7 @@ class Prompter:
         response = await loop.run_in_executor(None, self.generate, prompt_dicts)
         return index, response
 
-    async def generate_batch(
+    async def async_generate_batch(
         self,
         prompts: list,  # List of prompt strings
         batch_size:int=16
@@ -174,6 +174,14 @@ class Prompter:
             results.extend(batch_results)  # Collect results
         results.sort(key=lambda x: x[0])
         return [response for _, response in results]
+
+    def generate_batch(
+        self,
+        prompts:list[str], 
+        batch_size:int=16,
+    ):
+        # Create and run the event loop if not in Jupyter
+        return asyncio.run(self.async_generate_batch(prompts, batch_size))
 
     # =============================================
     def make_prompt(

@@ -57,7 +57,7 @@ def chat_mode(prompter):
     st.button("Clear Chat", on_click=lambda: st.session_state.update({"messages": []}))
 
 
-async def csv_upload_mode(prompter):
+def csv_upload_mode(prompter):
     """CSV upload and completion mode tab functionality."""
     st.subheader("Upload CSV and Get Completions")
     uploaded_file = st.file_uploader("Upload CSV File:", type=["csv"])
@@ -77,7 +77,7 @@ async def csv_upload_mode(prompter):
             else:
                 with st.spinner("Generating completions..."):
                     try:
-                        df[f"{prompter.model_name}_completion"] = await prompter.generate_batch(prompts=df[text_column])
+                        df[f"{prompter.model_name}_completion"] = prompter.generate_batch(prompts=df[text_column])
                         st.success("Completions added!")
                         st.write("Preview of updated file:", df.head())
 
