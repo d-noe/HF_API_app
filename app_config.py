@@ -31,10 +31,7 @@ def handle_provider_configuration(services_dict:dict, checkbox_keys:list=[]):
     token_name = None
 
     if len(checkbox_keys):
-        checkbox_bools = [k for k in checkbox_keys if st.session_state[k]]
-        if not True in checkbox_bools:
-            return token_name
-        selected_checkbox = [k for k, b in zip(checkbox_keys, checkbox_bools)][0]
+        selected_checkbox = [k for k in checkbox_keys if st.session_state[k]][0]
 
         if selected_checkbox == "API:Custom":
             custom_base_url = st.text_input("Enter base url", key="custom_base_url")
@@ -56,9 +53,6 @@ def get_api_token(token_name):
     """
     api_key = None
 
-    if token_name is None:
-        return None
-        
     if token_name in st.secrets:
         api_key = st.secrets[token_name]
     else:
