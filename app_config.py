@@ -6,6 +6,11 @@ import streamlit as st
 def provider_selection(services_dict:dict, default_check:str="API:OR"):
     
     def on_change_checkbox(current_key):
+        # Prevent all checkboxes from being unchecked
+        if not any(st.session_state[key] for key in checkbox_keys if key != current_key):
+            st.session_state[current_key] = True
+            st.warning("At least one provider must be selected.", icon="⚠️")
+            return
         # uncheck all checkboxes except current
         for key in checkbox_keys:
             if key != current_key:
