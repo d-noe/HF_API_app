@@ -57,7 +57,7 @@ def chat_mode(prompter):
     st.button("Clear Chat", on_click=lambda: st.session_state.update({"messages": []}))
 
 
-def csv_upload_mode(prompter):
+async def csv_upload_mode(prompter):
     """CSV upload and completion mode tab functionality."""
     st.subheader("Upload CSV and Get Completions")
     uploaded_file = st.file_uploader("Upload CSV File:", type=["csv"])
