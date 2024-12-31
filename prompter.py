@@ -191,8 +191,8 @@ class Prompter:
                         raise e
 
             # Process results and handle errors
-            for idx, result in batch_results:
-                original_index = idx#batch[idx][0]
+            for idx, result in enumerate(batch_results):
+                original_index = batch[idx][0]
                 if isinstance(result, Exception):
                     error_message = f"Error: {str(result)}"
                     errors[original_index] = error_message
@@ -201,7 +201,7 @@ class Prompter:
                     if error_callback:
                         error_callback(original_index, error_message)
                 else:
-                    results[original_index] = result
+                    results[original_index] = result[1]
 
         return results
 
