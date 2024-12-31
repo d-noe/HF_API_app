@@ -145,43 +145,73 @@ class Prompter:
     async def async_generate_batch(
         self,
         prompts: list,  # List of prompt strings
-        batch_size:int=16
+        batch_size: int = 16,
+        max_retries: int = 0,  # Maximum retries for failed prompts
+        error_callback=None,  # Function to report errors to the Streamlit UI
     ):
         """
-        Generates responses for a batch of prompts by calling the `generate` method for each.
+        Generates responses for a batch of prompts with parallel requests and error handling.
 
         Args:
             prompts (list): A list of prompt strings.
+            batch_size (int): Number of prompts to process in parallel.
+            max_retries (int): Maximum number of retries for failed prompts.
+            error_callback (function): A callback function to log or display errors in the Streamlit app.
 
         Returns:
-            list: A list of response strings for each prompt.
+            list: A list of response strings for each prompt. Failed prompts are replaced with error messages.
         """
-        # TODO: Implement optimized batch requests (e.g., parallelization or API-specific batching)
-        # ----
         if batch_size is None:
             batch_size = len(prompts)
+
         indexed_prompts = [(i, p) for i, p in enumerate(prompts)]
-        results = []
+        results = [None] * len(prompts)  # Placeholder for results
+        errors = {}
+
         for i in range(0, len(indexed_prompts), batch_size):
             batch = indexed_prompts[i:i + batch_size]  # Get the next batch
+
+            # Create async tasks for the batch
             tasks = [
                 self.async_generate(
-                    prompt_dicts=[{"role": "user", "content": self.make_prompt(id_prompt[1])}], 
+                    prompt_dicts=[{"role": "user", "content": self.make_prompt(id_prompt[1])}],
                     index=id_prompt[0]
                 ) for id_prompt in batch
             ]
-            batch_results = await asyncio.gather(*tasks)  # Run the batch concurrently
-            results.extend(batch_results)  # Collect results
-        results.sort(key=lambda x: x[0])
-        return [response for _, response in results]
+
+            # Run tasks concurrently and handle errors
+            for retry in range(max_retries + 1):
+                try:
+                    batch_results = await asyncio.gather(*tasks, return_exceptions=True)
+                    break  # Exit retry loop on success
+                except Exception as e:
+                    if retry < max_retries:
+                        await asyncio.sleep(2 ** retry)  # Exponential backoff
+                    else:
+                        raise e
+
+            # Process results and handle errors
+            for idx, result in enumerate(batch_results):
+                original_index = batch[idx][0]
+                if isinstance(result, Exception):
+                    error_message = f"Error: {str(result)}"
+                    errors[original_index] = error_message
+                    results[original_index] = ""
+                    # Call the error callback if provided
+                    if error_callback:
+                        error_callback(original_index, error_message)
+                else:
+                    results[original_index] = result
+
+        return results
 
     def generate_batch(
         self,
         prompts:list[str], 
-        batch_size:int=16,
+        **kwargs
     ):
         # Create and run the event loop if not in Jupyter
-        return asyncio.run(self.async_generate_batch(prompts, batch_size))
+        return asyncio.run(self.async_generate_batch(prompts, **kwargs))
 
     # =============================================
     def make_prompt(

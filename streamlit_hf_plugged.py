@@ -59,6 +59,9 @@ def chat_mode(prompter):
 
 def csv_upload_mode(prompter):
     """CSV upload and completion mode tab functionality."""
+    def report_error_to_streamlit(row_index, error_message):
+        st.error(f"Row {row_index}: {error_message}")
+
     st.subheader("Upload CSV and Get Completions")
     uploaded_file = st.file_uploader("Upload CSV File:", type=["csv"])
     uploaded_template = st.file_uploader("[Opt.] upload yaml prompt template:", type=["yaml"])
@@ -77,7 +80,10 @@ def csv_upload_mode(prompter):
             else:
                 with st.spinner("Generating completions..."):
                     try:
-                        df[f"{prompter.model_name}_completion"] = prompter.generate_batch(prompts=df[text_column])
+                        df[f"{prompter.model_name}_completion"] = prompter.generate_batch(
+                            prompts=df[text_column],
+                            error_callback=report_error_to_streamlit,
+                        )
                         st.success("Completions added!")
                         st.write("Preview of updated file:", df.head())
 
