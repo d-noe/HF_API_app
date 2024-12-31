@@ -72,7 +72,26 @@ def csv_upload_mode(prompter):
             prompter.load_prompt_template(uploaded_template.getvalue())
         st.write("Preview of uploaded file:", df.head())
         text_column = st.selectbox("Select Text Column for Completion:", df.columns)
-        st.write(f"Prompt example:\n\n {prompter.make_prompt(list(df[text_column])[0])}")
+
+        # Default completion column
+        default_completion_col = f"{prompter.model_name}_completion"
+        # Allow user to select or specify an existing completion column
+        st.write("Select or specify the column for existing completions:")
+        completion_column = st.text_input(
+            "Completion Column:", 
+            value=default_completion_col, 
+            help="Leave as default or specify a column name where completions are stored."
+        )
+        # Initialize the completion column if it doesn't exist
+        if completion_column not in df.columns:
+            st.warning(f"Column '{completion_column}' does not exist. It will be created.")
+            df[completion_column] = ""
+        # Identify rows with missing completions
+        missing_indices = df[df[completion_column].isna() | (df[completion_column] == "")].index
+        st.write(f"Rows with missing completions: {len(missing_indices)}")
+
+        # Display prompt example
+        st.write(f"**Prompt example:**\n\n {prompter.make_prompt(list(df[text_column])[0])}")
 
         if st.button("Generate Completions"):
             if not st.session_state["log_status"]:
@@ -80,10 +99,13 @@ def csv_upload_mode(prompter):
             else:
                 with st.spinner("Generating completions..."):
                     try:
-                        df[f"{prompter.model_name}_completion"] = prompter.generate_batch(
-                            prompts=df[text_column],
-                            **{"error_callback":report_error_to_streamlit},
-                        )
+                        # Generate completions only for rows with missing values
+                        prompts = df.loc[missing_indices, text_column].tolist()
+                        completions = prompter.generate_batch(prompts=prompts)
+                        # Update the DataFrame with new completions
+                        for idx, completion in zip(missing_indices, completions):
+                            df.at[idx, completion_column] = completion
+                            
                         st.success("Completions added!")
                         # Provide download link for updated CSV
                         csv = df.to_csv(index=False).encode("utf-8")
