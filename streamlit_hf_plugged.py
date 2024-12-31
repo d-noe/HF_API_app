@@ -78,7 +78,7 @@ def csv_upload_mode(prompter):
         # Default completion column
         default_completion_col = f"{prompter.model_name}_completion"
         # Allow user to select or specify an existing completion column
-        st.write("Select or specify the column for existing completions:")
+        st.write("**Select or specify the column for existing completions:**")
         completion_column = st.text_input(
             "Completion Column:", 
             value=default_completion_col, 
@@ -100,7 +100,7 @@ def csv_upload_mode(prompter):
                     try:
                         # Generate completions only for rows with missing values
                         prompts = df.loc[missing_indices, text_column].tolist()
-                        completions = prompter.generate_batch(prompts=prompts)
+                        completions = prompter.generate_batch(prompts=prompts, **{'error_callback':report_error_to_streamlit})
                         # Update the DataFrame with new completions
                         for idx, completion in zip(missing_indices, completions):
                             df.at[idx, completion_column] = completion
