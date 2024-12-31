@@ -82,7 +82,7 @@ def csv_upload_mode(prompter):
                     try:
                         df[f"{prompter.model_name}_completion"] = prompter.generate_batch(
                             prompts=df[text_column],
-                            error_callback=report_error_to_streamlit,
+                            **{"error_callback":report_error_to_streamlit},
                         )
                         st.success("Completions added!")
                         st.write("Preview of updated file:", df.head())
