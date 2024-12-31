@@ -85,8 +85,6 @@ def csv_upload_mode(prompter):
                             **{"error_callback":report_error_to_streamlit},
                         )
                         st.success("Completions added!")
-                        st.write("Preview of updated file:", df.head())
-
                         # Provide download link for updated CSV
                         csv = df.to_csv(index=False).encode("utf-8")
                         st.download_button(
@@ -95,6 +93,8 @@ def csv_upload_mode(prompter):
                             file_name="completed_file.csv",
                             mime="text/csv",
                         )
+                        # Preview csv
+                        st.write("Preview of updated file:", df.head())
                     except Exception as e:
                         st.error(f"⚠️ Error while generating completions: {e}")
 

@@ -165,7 +165,7 @@ class Prompter:
             batch_size = len(prompts)
 
         indexed_prompts = [(i, p) for i, p in enumerate(prompts)]
-        results = [None] * len(prompts)  # Placeholder for results
+        results = [""] * len(prompts)  # Placeholder for results
         errors = {}
 
         for i in range(0, len(indexed_prompts), batch_size):
