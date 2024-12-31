@@ -72,6 +72,8 @@ def csv_upload_mode(prompter):
             prompter.load_prompt_template(uploaded_template.getvalue())
         st.write("Preview of uploaded file:", df.head())
         text_column = st.selectbox("Select Text Column for Completion:", df.columns)
+        # Display prompt example
+        st.write(f"**Prompt example:**\n\n {prompter.make_prompt(list(df[text_column])[0])}")
 
         # Default completion column
         default_completion_col = f"{prompter.model_name}_completion"
@@ -90,9 +92,6 @@ def csv_upload_mode(prompter):
         missing_indices = df[df[completion_column].isna() | (df[completion_column] == "")].index
         st.write(f"Rows with missing completions: {len(missing_indices)}")
 
-        # Display prompt example
-        st.write(f"**Prompt example:**\n\n {prompter.make_prompt(list(df[text_column])[0])}")
-
         if st.button("Generate Completions"):
             if not st.session_state["log_status"]:
                 st.error("⚠️ API is not connected. Please check your HuggingFace API token in the sidebar.")
@@ -105,7 +104,7 @@ def csv_upload_mode(prompter):
                         # Update the DataFrame with new completions
                         for idx, completion in zip(missing_indices, completions):
                             df.at[idx, completion_column] = completion
-                            
+
                         st.success("Completions added!")
                         # Provide download link for updated CSV
                         csv = df.to_csv(index=False).encode("utf-8")
