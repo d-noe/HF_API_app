@@ -65,6 +65,23 @@ def csv_upload_mode(prompter):
     st.subheader("Upload CSV and Get Completions")
     uploaded_file = st.file_uploader("Upload CSV File:", type=["csv"])
     uploaded_template = st.file_uploader("[Opt.] upload yaml prompt template:", type=["yaml"])
+    # Dropdown to select pre-existing templates from the templates folder
+    templates_folder = "./templates/"
+    template_options, template_descriptions = get_available_templates(templates_folder)
+    selected_template_file = st.selectbox(
+        "Or choose an existing template from the list below:",
+        options=[None] + template_options,
+        format_func=lambda x: x if x is None else x
+    )
+
+    if selected_template_file:
+        # Display template name and description
+        with open(os.path.join(templates_folder, selected_template_file), 'r') as file:
+            template = yaml.safe_load(file)
+            st.write(f"**Template Name:** {template.get('name', 'Unnamed Template')}")
+            st.write(f"**Description:** {template_descriptions[selected_template_file]}")
+        # Load the chosen template
+        prompter.load_prompt_template(open(os.path.join(templates_folder, selected_template_file)).read())
 
     if uploaded_file:
         df = pd.read_csv(uploaded_file)

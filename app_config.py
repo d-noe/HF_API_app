@@ -3,7 +3,7 @@ import streamlit as st
 # ==============================================
 # Sub-functions for modularity
 
-def provider_selection(services_dict:dict, default_check:str="API:OR"):
+def provider_selection(services_dict:dict, default_check:str="API:HF"):
     
     def on_change_checkbox(current_key):
         # Prevent all checkboxes from being unchecked

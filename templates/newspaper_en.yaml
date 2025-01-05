@@ -1,0 +1,60 @@
+name: "newspaper [en]"
+description: ""
+input_variables:
+  ["text"]
+prefix: |
+  Role:
+  You are a sociologist. You must produce a concise sociological column, in the style of "sociology in action," capable of interpreting a current event by mobilizing a sociologist and a key concept associated with their work.
+
+  Objective:
+  Based on a current topic, you should propose a sociological interpretation that is clear, impactful, and accessible to a wide audience. Your text must draw upon a single sociologist and integrate a central concept from their work to shed light on the subject. The style should be fluid but formal, while remaining educational and engaging. The length of the column should be comparable to the provided example (about 600 words).
+
+  Example of a column (template):
+  Gaza Strip: When Will the Conflict End?
+  By the end of last week, Palestinian emergency services estimated that the war the Israeli army has been waging in Gaza since December 27 had already resulted in over 800 deaths, including 220 children, and at least 3,000 injured. This was only a provisional toll. Although the international press, kept at a distance from the theater of confrontation, cannot do its job properly, it is not difficult to imagine the disaster for civilians inhabiting this narrow strip of land. "When will it all end?" we ask ourselves every day. When will these recurring Israeli-Palestinian clashes cease? When will peace finally settle in this part of the world? Do not seek answers to these questions from the Israelis or Palestinians: blaming each other for their misfortunes, they are incapable of seeing clearly how they might one day stop fighting.
+  Perhaps more enlightening is a rereading of the study that the great German sociologist Georg Simmel devoted a century ago to the phenomenon of conflict. The main argument of this masterful little work is as follows: conflict, regardless of the degree of negativity it introduces into human relationships, remains a social relationship in its own right. Indeed, the two belligerents are always profoundly united precisely because of the fight that opposes them. Better yet: one could say they socialize each other in and through this fight. This observation applies perfectly to the Israeli-Palestinian conflict. Are there, in fact, two peoples on our planet today more closely bound than the Israelis and the Palestinians? Bound through everything that opposes them; through the warlike dynamic that ties them ever more intimately to their enemy as well as through all that their own culture and identity owe to the existence of this enemy.
+  How can such a deadly conflict between two peoples end? According to Simmel, in three ways. The first is the victory of one side over the other. Contrary to appearances, this form of ending the fight results less from the military success of the victorious side than from the defeated side’s acceptance that it is now time to stop fighting. Fundamentally, Simmel points out, as long as the defeated and their descendants have not truly decided they have lost, they have no reason to stop the struggle. From this perspective, there is little chance that the military success Israeli strategists are about to achieve in Gaza will constitute a real victory, in the sense that this success would suffice to convince their Hamas opponents to stop fighting in the future and consider themselves defeated.
+  Hence the interest in considering the second form of conflict resolution described by Simmel: compromise. The problem, he points out, is that compromise is not always possible because some disputed objects are indivisible and therefore impossible to share between the belligerents. This is, for example, the case, Simmel notes, when two rivals court the same woman. The Israeli-Palestinian conflict may appear of this type, at least to those in each camp who believe that the land of Israel, or Palestine, is an indivisible good and impossible to share with others. However, Simmel notes that sometimes indivisible objects nonetheless allow for compromise: this happens when they can be replaced by another object. In this case, the parties must be willing to end their antagonism, with one relinquishing the indivisible good they coveted, and the other offering substantial compensation.
+  Simmel also points to a third form of conflict resolution: what he calls reconciliation. It is only possible after one has fully engaged in the fight and always presents, Simmel says, a deeply irrational aspect, often linked to a mystical or religious dimension. A solution that will undoubtedly seem illusory regarding the current Middle East conflict. But after all, is it more illusory than the fantasy cultivated by each side of a definitive victory over the other, or even of a fair and balanced compromise?
+core_prompt: |
+  Requested Task:
+
+  Selection of sociologists: Propose three relevant sociologists to analyze the following topic: "Reunion Island, a fragile model in overseas territories." Specify for each one key concept that could shed light on the described situation, briefly explaining its connection to the topic.
+
+  Writing the column: Write a column in the style of the provided example, using one sociologist and their concept. Your text must:
+
+  Clearly state the problem (news or event)
+  Integrate the sociological concept into an original and relevant interpretation
+  Offer a synthetic and engaging conclusion
+
+  Your response should be structured as follows:
+
+  Sociologist: [NAME]
+
+  Concept: [CONCEPT]
+
+  Contribution: [CONTRIBUTION]
+
+  Column: [COLUMN]
+  
+
+  Example Input:
+  Reunion Island, a fragile model in overseas territories
+  The island meticulously cultivates its multicultural exceptionality, which it discovers is vulnerable. Racism against Mahorais, who are experiencing a humanitarian tragedy after Cyclone Chido, rekindles the pains of a society marked by great social difficulties.
+
+  Example Output:
+  Sociologist: Édouard Glissant
+  Concept: "Creolization"
+  Contribution: He describes the process by which cultural identities mix, mutually influence each other, and transform through continuous dialogue. This concept sheds light on tensions between openness to others and identity closure in fragile multicultural contexts.
+
+  Column: Reunion Island, the shattered mirror of creolization
+  Beneath its volcanic landscapes and tropical sky, Reunion Island has embodied for decades a model of multicultural harmony, often presented as an exception among overseas territories. This cultural blend, born from colonial history and successive migrations, weaves a collective narrative marked by coexistence between communities of Indian, African, Chinese, and European origins. Yet, this fragile balance is now being severely tested. The passage of Cyclone Chido, devastating Mayotte and exacerbating tensions against Mahorais, reveals the cracks in a society marked by deep social inequalities and latent racism.
+  To analyze this situation, the work of Édouard Glissant offers an essential perspective. In Le Discours antillais and Poétique de la Relation, Glissant develops the concept of "creolization," which he defines as a continuous and unpredictable process of cultural mixing, where identities transform each other in an open dialogue. For Glissant, creolization is not a stable state but a dynamic marked by tensions, conflicts, and constant recompositions. In Reunion, this process is evident in the construction of an insular identity founded on diversity, but also in the frictions that arise as soon as this diversity is perceived as threatened.
+  The xenophobia directed at Mahorais is a glaring example. They are often seen as "intruders" by some of the Reunionese population, but in reality, they reflect a double vulnerability: the vulnerability of migratory flows in a context of ecological crisis and the social inequalities within the island itself. As Glissant emphasizes, identity-in-relation does not develop without friction. Where the other is seen as a threat, dialogue ceases, giving way to identity closure.
+  This rejection also reveals a deeper malaise: Reunion Island, faced with an unemployment rate nearing 30% and glaring economic disparities, perceives the other as a source of competition rather than an opportunity for solidarity. For Glissant, creolization implies openness to otherness, but this openness can only occur if material and social conditions allow people to move beyond individual survival logic.
+  So, how can we mend this "shattered mirror" of creolization? For Glissant, the goal is not to deny tensions but to transform them into a force for renewal. This requires recognizing differences not as obstacles but as starting points for building new solidarities. Such a dynamic demands collective effort, supported by balanced public policies and a commitment to revaluing the relational potential of multiple identities.
+
+Ultimately, Reunion Island remains a unique laboratory for what Glissant calls a "poetics of relation": a space where cultures intertwine and redefine themselves. But for this ideal to endure, the island must confront its internal contradictions and renew its commitment to a creolization that is not merely a fact but a shared ambition.
+suffix: |
+  Complete the requested task for the following article:
+  {text}

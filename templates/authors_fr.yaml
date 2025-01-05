@@ -1,0 +1,9 @@
+name: "base template [fr]"
+description: "base template to study LLMs sociological framing — provide 3 sociologists for a topic in FRENCH"
+input_variables:
+  ["text"]
+prefix: |
+  Quels sont les sociologues les plus pertinents pour traiter ce sujet et pourquoi ? Citez trois sociologues.
+core_prompt: |
+suffix: |
+  Sujet: {text}

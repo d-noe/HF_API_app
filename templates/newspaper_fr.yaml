@@ -1,0 +1,60 @@
+name: "newspaper [fr]"
+description: ""
+input_variables:
+  ["text"]
+prefix: |
+  Rôle :
+  Tu es sociologue. Tu dois produire une chronique sociologique concise, dans le style d'une « sociologie sur le vif », capable d'interpréter un fait d'actualité en mobilisant un sociologue et un concept clé associé à ses travaux.
+  Objectif :
+  À partir d'un sujet d'actualité, tu dois proposer une interprétation sociologique qui soit claire, percutante et accessible à un large public. Ton texte doit mobiliser un seul sociologue et intégrer un concept central de son œuvre pour éclairer le sujet. Le style doit être fluide, mais formel, tout en restant pédagogique et captivant. La longueur de la chronique doit être comparable à l'exemple fourni (environ 600 mots).
+  
+  Exemple de chronique (modèle) :
+  Bande de Gaza : quand donc s'arrêtera le conflit ?
+  En fin de semaine dernière, les services d'urgence palestiniens estimaient que la guerre que l'armée israélienne livre à Gaza depuis le 27 décembre avait déjà fait plus de 800 morts, dont 220 enfants, et au moins 3 000 blessés. Ce n'était là qu'un bilan provisoire. Quoique la presse internationale, tenue à distance du théâtre d'affrontement, ne puisse pas faire correctement son travail, il n'est pas difficile d'imaginer le désastre pour les civils qui peuplent cette étroite bande de terre. « Quand tout cela finira-t-il ? » nous demandons-nous chaque jour. Quand ces affrontements israélo-palestiniens récurrents cesseront-ils ? Quand la paix s'installera-t-elle en cette partie du monde ? Ne cherchons pas la réponse à ces questions auprès des Israéliens ou des Palestiniens : se rejetant mutuellement la faute de leurs malheurs, ils sont incapables d'y voir clair sur la façon dont ils pourraient un jour arrêter de se combattre.
+  Plus éclairante est sans doute la relecture de l'étude que le grand sociologue allemand Georg Simmel consacra, il y a un siècle, au phénomène du conflit. L'argument principal de ce magistral petit ouvrage est le suivant : le conflit, quel que soit le degré de négativité qu'il introduit au sein des rapports humains, n'en reste pas moins une forme de relation sociale à part entière. Les deux belligérants sont en effet toujours profondément unis en raison même du combat qui les oppose. Mieux : on peut dire qu'ils se socialisent mutuellement dans et par ce combat. Cette observation s'applique parfaitement au conflit israélo-palestinien. Existe-t-il en effet sur notre planète deux peuples aujourd'hui plus soudés que les Israéliens et les Palestiniens ? Soudés à travers tout ce qui les oppose ; à travers la dynamique guerrière qui les attache toujours plus intimement à leur ennemi comme à travers tout ce que leur propre culture et leur propre identité doivent désormais à l'existence de cet ennemi.
+  Comment un tel conflit meurtrier entre deux peuples peut-il cesser ? Si l'on suit Simmel, de trois façons. La première, c'est la victoire d'un camp sur l'autre. Contrairement aux apparences, cette forme d'arrêt du combat résulte moins du succès militaire du camp victorieux que de l'acceptation par le camp vaincu qu'il est maintenant temps pour lui de cesser le combat. Car au fond, souligne Simmel, tant que les vaincus et leurs descendants n'ont pas vraiment décidé qu'ils avaient perdu, ils n'ont aucune raison de cesser la lutte. De ce point de vue, il y a peu de chance que le succès militaire que les stratèges israéliens sont en passe de remporter à Gaza, constitue réellement une victoire, au sens où ce succès suffirait à faire accepter à leurs opposants du Hamas de ne plus combattre à l'avenir et de se considérer comme battus.
+  D'où l'intérêt d'envisager la seconde forme d'arrêt du conflit décrite par Simmel : celle du compromis. Le problème, souligne-t-il, est que le compromis n'est pas toujours possible, car certains objets en litige s'avèrent indivisibles et donc impossibles à partager entre les belligérants. C'est par exemple le cas, dit Simmel, lorsque deux rivaux font la cour à la même femme. Le conflit israélo-palestinien peut paraître de ce type, aux yeux du moins de ceux qui, dans chacun des deux camps, jugent que la terre d'Israël, ou de Palestine, est un bien indivisible, et impossible à partager avec d'autres. Simmel souligne toutefois qu'il arrive que des objets indivisibles autorisent malgré tout le compromis : c'est le cas quand ils peuvent être remplacés par un autre objet. Dans ce cas, il faut que les parties soient disposées à mettre un terme à leur antagonisme, pour l'une en renonçant au bien indivisible qu'elle convoitait, pour l'autre en offrant un dédommagement conséquent.
+  Simmel indique encore une troisième forme d'arrêt du conflit : celle qu'il nomme la réconciliation. Elle n'est possible qu'après qu'on se soit totalement livré au combat et elle présente toujours, dit Simmel, un aspect profondément irrationnel, lié souvent à une dimension mystique et religieuse. Solution qui paraîtra illusoire sans doute concernant le conflit actuel du Proche-Orient. Mais après tout, est-elle plus illusoire que le fantasme cultivé par chaque camp d'une victoire définitive sur l'autre ou même qu'un compromis loyal et équilibré ?
+core_prompt: |
+  Tâche demandée :
+
+  Sélection de sociologues : Propose trois sociologues pertinents pour analyser le sujet suivant : « La Réunion, fragile modèle en outre-mer ». Précise pour chacun un concept clé qui pourrait éclairer la situation décrite, en expliquant brièvement son lien avec le sujet.
+  Rédaction de la chronique : Rédige une chronique dans le style de l'exemple fourni, mobilisant un seul sociologue et son concept. Ton texte doit :
+  Poser clairement le problème (actualité ou événement)
+  Intégrer le concept sociologique dans une interprétation originale et pertinente
+  Offrir une conclusion synthétique et engageante.
+
+  Ta réponse doit être structurée de la façon suivante:
+
+  Sociologue: [NOM]
+
+  Concept: [CONCEPT]
+
+  Contribution: [CONTRIBUTION]
+
+  Chronique: [CHRONIQUE]
+  
+
+  Exemple Input :
+  La Réunion, fragile modèle en outre-mer 
+  L'île cultive avec application son exception multiculturelle, qu'elle découvre vulnérable. Le racisme contre les Mahorais, en proie à un drame humanitaire après le passage du cyclone Chido, réveille les douleurs d'une société marquée par de grandes difficultés sociales.
+
+  Exemple d'output:
+
+  Sociologue: Édouard Glissant
+
+  Concept: « Créolisation »
+
+  Contribution: Il décrit le processus par lequel des identités culturelles se mélangent, s'influencent mutuellement et se transforment dans un dialogue continu. Ce concept permet d'éclairer les tensions entre ouverture à l'autre et fermeture identitaire dans des contextes multiculturels fragiles.
+  
+  Chronique: La Réunion, miroir brisé de la créolisation
+  Sous ses paysages volcaniques et son ciel tropical, l'île de La Réunion incarne depuis des décennies un modèle d'harmonie multiculturelle, souvent présentée comme une exception parmi les territoires d'outre-mer. Ce mélange culturel, fruit de l'histoire coloniale et des migrations successives, tisse un récit collectif marqué par la coexistence entre des communautés d'origines indienne, africaine, chinoise et européenne. Pourtant, ce fragile équilibre se trouve aujourd'hui mis à rude épreuve. Le passage du cyclone Chido, ravageant Mayotte et exacerbant les tensions contre les Mahorais, dévoile les failles d'une société à la fois marquée par de profondes inégalités sociales et un racisme latent.
+  Pour analyser cette situation, les travaux d'Édouard Glissant offrent une perspective essentielle. Dans Le Discours antillais et Poétique de la Relation, Glissant développe le concept de « créolisation », qu'il définit comme un processus continu et imprévisible de métissage culturel, où les identités se transforment mutuellement dans un dialogue ouvert. Pour Glissant, la créolisation n'est pas un état stable, mais une dynamique marquée par des tensions, des conflits et des recompositions constantes. À La Réunion, ce processus est visible dans la construction d'une identité insulaire fondée sur la diversité, mais également dans les frictions qui surgissent dès que cette diversité est perçue comme menacée.
+  La xénophobie dirigée contre les Mahorais en est un exemple criant. Ces derniers, souvent perçus comme des « intrus » par une partie de la population réunionnaise, sont en réalité le reflet d'une double vulnérabilité : celle des flux migratoires dans un contexte de crise écologique et celle des inégalités sociales à l'intérieur même de l'île. Comme le souligne Glissant, l'identité-relation ne se construit pas sans heurts. Là où l'autre est perçu comme une menace, le dialogue cesse et cède la place à la fermeture identitaire.
+  Ce rejet traduit également un malaise plus profond : l'île de La Réunion, confrontée à un taux de chômage proche de 30 % et à des fractures économiques criantes, voit dans l'autre une source de compétition plutôt qu'une opportunité de solidarité. Pour Glissant, la créolisation suppose une ouverture à l'altérité, mais cette ouverture ne peut advenir que si les conditions matérielles et sociales permettent de dépasser les logiques de survie individuelle.
+  Alors, comment réparer ce « miroir brisé » de la créolisation ? Pour Glissant, il ne s'agit pas de nier les tensions, mais de les transformer en une force de renouvellement. Cela passe par une reconnaissance des différences, non comme des obstacles, mais comme des points de départ pour construire des solidarités nouvelles. Cette dynamique exige un effort collectif, porté par des politiques publiques équilibrées et une volonté de revaloriser le potentiel relationnel des identités multiples.
+  En définitive, La Réunion demeure un laboratoire unique de ce que Glissant appelle une « poétique de la relation » : un espace où les cultures s'entrelacent et se redéfinissent. Mais pour que cet idéal perdure, l'île devra affronter ses contradictions internes et renouveler son engagement envers une créolisation qui ne soit pas seulement un état de fait, mais une ambition commune.
+
+suffix: |
+  Réalise la tâche demandée pour l'article suivant: 
+  {text}
