@@ -214,6 +214,55 @@ class Prompter:
         return asyncio.run(self.async_generate_batch(prompts, **kwargs))
 
     # =============================================
+    def generate_more(
+        self,
+        initial_prompt: str = None,  # Initial prompt 
+        more_prompt: int|list = "Make it MORE",
+        n_more: int = 2,
+        sleep_time = 5,
+    ):
+        """
+        Iteratively refine the response by prompting the model to make it MORE.
+
+        Args:
+            initial_prompt (str): The initial prompt to start the conversation.
+            more_prompt (str): The prompt used iteratively in the discussion after the initial turn.
+            n_more (int): Number of refinement iterations.
+
+        Returns:
+            str: The final discussion history after n_more turns.
+        """
+        import time
+
+        if type(more_prompt)==list:
+            assert(len(more_prompt)==n_more)
+        else:
+            more_prompt = [more_prompt]*n_more
+
+        prompt_dicts = [{"role":"user","content":initial_prompt}]
+        for k in range(n_more+1):
+            if k == 0:
+                # Initial prompt
+                if not initial_prompt is None:
+                    response = self.generate(prompt_dicts)
+            else:
+                # "MORE" utterances
+                prompt_dicts.append({
+                    "role":"user",
+                    "content":more_prompt[k-1]
+                })
+                response = self.generate(prompt_dicts)
+
+            # Append a assistant's answer from the prompt
+            prompt_dicts.append({
+                "role":"assistant",
+                "content":response
+            })
+            time.sleep(spleep_time)
+
+        return prompt_dicts
+
+    # =============================================
     def make_prompt(
         self, prompt:str,
     ):
