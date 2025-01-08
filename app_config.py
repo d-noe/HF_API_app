@@ -27,10 +27,6 @@ def provider_selection(services_dict:dict, default_check:str="API:HF"):
     st.checkbox('Other Endpoint', key=key, on_change=on_change_checkbox, args=(key,))
     checkbox_keys.append(key)
 
-    key = "API:Parallel"
-    st.checkbox('Compare Multiple Endpoints', key=key, on_change=on_change_checkbox, args=(key,))
-    checkbox_keys.append(key)
-
     if st.session_state.get("API:Custom", False):
         handle_custom_endpoint_ui()
 
