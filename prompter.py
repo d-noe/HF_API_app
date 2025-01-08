@@ -79,32 +79,6 @@ class Prompter:
         self.model_name = model_name
         return
 
-    def generate_parallel(self, prompt: str, base_urls: list[str]):
-    """
-    Generates responses from multiple endpoints in parallel.
-    
-    Args:
-        prompt (str): The prompt to send to all endpoints
-        base_urls (list[str]): List of base URLs to send the prompt to
-        
-    Returns:
-        list: List of responses from each endpoint
-    """
-    prompters = []
-    for base_url in base_urls:
-        p = Prompter(base_url=base_url)
-        p._set_token(self.token)
-        p._set_model("tgi")
-        prompters.append(p)
-    
-    # Generate responses from all endpoints
-    responses = []
-    for p in prompters:
-        response = p.generate(prompt_dicts=[{"role": "user", "content": prompt}])
-        responses.append(response)
-    
-    return responses
-
     def _set_generation_args(
         self,
         generation_args: dict = {},  # Additional generation parameters
