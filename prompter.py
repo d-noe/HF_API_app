@@ -24,7 +24,7 @@ class Prompter:
     """
     def __init__(
         self,
-        base_url=OPENROUTER_URL,  # Default base URL for API requests
+        base_url=HF_URL,  # Default base URL for API requests
     ):
         """
         Initializes the Prompter instance with default or specified values.

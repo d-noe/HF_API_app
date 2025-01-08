@@ -27,7 +27,47 @@ def provider_selection(services_dict:dict, default_check:str="API:HF"):
     st.checkbox('Other Endpoint', key=key, on_change=on_change_checkbox, args=(key,))
     checkbox_keys.append(key)
 
+    if st.session_state.get("API:Custom", False):
+        handle_custom_endpoint_ui()
+
     return checkbox_keys
+
+
+def handle_custom_endpoint_ui():
+    """
+    Renders the UI for custom endpoints, with predefined options (password-protected) and manual entry.
+    """
+    if not st.session_state.get("authenticated", False):
+        with st.expander("Admin Login"):
+            password = st.text_input("Enter admin password:", type="password", key="admin_password")
+            if st.button("Submit", key="auth_submit"):
+                if password == st.secrets["admin"]["password"]:
+                    st.session_state["authenticated"] = True
+                    st.success("Authentication successful!")
+                else:
+                    st.error("Incorrect password. Please try again.")
+        return
+
+    # Retrieve custom endpoints from secrets
+    custom_endpoints = st.secrets.get("custom_endpoints", {})
+    if not custom_endpoints:
+        st.warning("No predefined custom endpoints found in secrets.")
+        return
+
+    # Predefined custom endpoints dropdown
+    predefined_option = st.selectbox("Choose a predefined custom endpoint:",
+                                     options=["Enter manually"] + list(custom_endpoints.keys()),
+                                     key="custom_predefined_dropdown")
+    
+    if predefined_option == "Enter manually":
+        # Manual entry for custom base URL
+        custom_base_url = st.text_input("Enter base URL", key="manual_custom_base_url")
+        st.session_state["base_url"] = custom_base_url if custom_base_url else ""
+    else:
+        # Set predefined endpoint
+        selected_base_url = custom_endpoints[predefined_option]
+        st.session_state["base_url"] = selected_base_url
+        st.session_state["AVAILABLE_MODELS"] = ["tgi"]
 
 def handle_provider_configuration(services_dict:dict, checkbox_keys:list=[]):
     """
@@ -39,9 +79,10 @@ def handle_provider_configuration(services_dict:dict, checkbox_keys:list=[]):
         selected_checkbox = [k for k in checkbox_keys if st.session_state[k]][0]
 
         if selected_checkbox == "API:Custom":
-            custom_base_url = st.text_input("Enter base url", key="custom_base_url")
-            st.session_state["base_url"] = custom_base_url
-            st.session_state["AVAILABLE_MODELS"] = []
+            #custom_base_url = st.text_input("Enter base url", key="custom_base_url")
+            #st.session_state["base_url"] = custom_base_url
+            # Custom endpoint is handled via session_state updates in `handle_custom_endpoint_ui`
+            #st.session_state["AVAILABLE_MODELS"] = [""]
             st.session_state["HELP_MESSAGE"] = ""
         else:
             token_name = selected_checkbox.split(":")[1]+"_API_TOKEN"
