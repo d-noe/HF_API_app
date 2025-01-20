@@ -1,0 +1,17 @@
+name: "Example template: Likert Scale Rating"
+description: "Example template to ask LLMs to rate their agreement with a statement on a scale from 1 to 5."
+input_variables:
+  ["text"]
+prefix: |
+  Indicate how much you agree or disagree with the following statement. Reply with one of the following options: 
+    1 = Strongly Disagree, 
+    2 = Disagree, 
+    3 = Slightly Disagree, 
+    4 = Neither Agree nor Disagree, 
+    5 = Slightly Agree, 
+    6 = Agree, 
+    7 = Strongly Agree.
+core_prompt: |
+  Statement: {text}
+suffix: |
+  Please, make sure to provide only the numerical value associated with your answer (ie. '1', '2', '3', '4', '5', '6' or '7').

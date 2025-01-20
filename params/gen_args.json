@@ -1,7 +1,7 @@
 {
     "temperature": {
         "name": "Temperature",
-        "default":0.4,
+        "default":0.0,
         "min":0.0,
         "max":2.0
     },
