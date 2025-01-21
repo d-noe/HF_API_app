@@ -1,5 +1,5 @@
 name: "Example template: Likert Scale Rating"
-description: "Example template to ask LLMs to rate their agreement with a statement on a scale from 1 to 5."
+description: "Example template to ask LLMs to rate their agreement with a statement on a scale from 1 to 7."
 input_variables:
   ["text"]
 prefix: |
