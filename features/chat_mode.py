@@ -42,12 +42,6 @@ def chat_mode(
         user_message = st.session_state[chat_input_key].strip()
         if user_message:
             for i, history in enumerate(st.session_state[conv_histories_key][:num_models]):
-                if not st.session_state["log_status"]:
-                    history.append({
-                        "role": "assistant",
-                        "content": "⚠️ API is not connected. Please check your API token.",
-                    })
-                    return
                 history.append({"role": "user", "content": user_message})
                 try:
                     with st.spinner(f"Generating response for Model {i + 1}..." if num_models > 1 else "Generating response..."):
